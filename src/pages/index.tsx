@@ -1,78 +1,109 @@
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { GetStaticProps, InferGetStaticPropsType } from "next";
+import Link from "next/link";
+import SEO from "@/components/SEO";
+import TechnologyCard from "@/components/TechnologyCard";
+import { getAllTechnologies } from "@/lib/techService";
+import type { Technology } from "@/data/technologies";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+/**
+ * Home Page (SSG)
+ * ----------------
+ * Statically generated at build time via getStaticProps.
+ *
+ * Why SSG?
+ *   The technology list is static and changes infrequently.
+ *   Pre-rendering gives the fastest possible TTFB and ensures
+ *   search engine crawlers see fully rendered HTML on first request.
+ *
+ * SEO strategy:
+ *   - Optimized <title> and <meta description>
+ *   - Internal links to every technology page (card grid)
+ *   - CTA linking to the /compare page
+ *   - Single <h1> with proper heading hierarchy
+ */
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+interface HomeProps {
+  technologies: Technology[];
+}
 
-export default function Home() {
+export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+  const technologies = getAllTechnologies();
+
+  return {
+    props: {
+      technologies,
+    },
+  };
+};
+
+export default function HomePage({
+  technologies,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
-    <div
-      className={`${geistSans.className} ${geistMono.className} flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black`}
-    >
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the index.tsx file.
+    <>
+      <SEO
+        title="Tech Stack Explorer | Discover & Compare Backend Technologies"
+        description="Explore and compare popular backend technologies like Node.js, Django, FastAPI, PostgreSQL, and more. In-depth guides, use cases, and side-by-side comparisons."
+        canonicalPath="/"
+      />
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
+        {/* Hero Section */}
+        <section className="text-center mb-12">
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4">
+            Tech Stack{" "}
+            <span className="text-primary">Explorer</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
+            Discover, learn about, and compare the most popular backend
+            technologies powering modern applications. From runtimes to
+            frameworks to databases.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs/pages/getting-started?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+          <Link href="/compare?tech1=nodejs&tech2=django">
+            <Button size="lg" className="cursor-pointer">
+              Compare Technologies →
+            </Button>
+          </Link>
+        </section>
+
+        <Separator className="mb-10" />
+
+        {/* Technology Grid */}
+        <section>
+          <h2 className="text-2xl font-bold mb-6">
+            All Technologies
+            <span className="text-muted-foreground font-normal text-base ml-2">
+              ({technologies.length})
+            </span>
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {technologies.map((tech) => (
+              <TechnologyCard key={tech.slug} technology={tech} />
+            ))}
+          </div>
+        </section>
+
+        {/* Internal Links Section — boosts crawlability */}
+        <Separator className="my-10" />
+
+        <section>
+          <h2 className="text-xl font-semibold mb-4">Quick Links</h2>
+          <div className="flex flex-wrap gap-2">
+            {technologies.map((tech) => (
+              <Link
+                key={tech.slug}
+                href={`/technology/${tech.slug}`}
+                className="text-sm text-primary hover:underline"
+              >
+                {tech.name}
+              </Link>
+            ))}
+          </div>
+        </section>
+      </div>
+    </>
   );
 }
