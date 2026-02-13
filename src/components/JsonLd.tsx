@@ -1,16 +1,6 @@
 import Head from "next/head";
 import type { Technology } from "@/data/technologies";
 
-/**
- * JSON-LD Structured Data Component
- * -----------------------------------
- * Injects a <script type="application/ld+json"> block into <head>
- * using the schema.org SoftwareApplication type.
- *
- * This structured data helps search engines understand the page content
- * and can trigger rich snippets in search results.
- */
-
 interface JsonLdProps {
     technology: Technology;
 }

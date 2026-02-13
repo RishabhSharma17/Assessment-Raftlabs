@@ -1,12 +1,5 @@
 import Link from "next/link";
 
-/**
- * Header Component
- * -----------------
- * Sticky navigation bar providing consistent branding and navigation.
- * Links back to home for single-click crawlability from any page.
- */
-
 export default function Header() {
     return (
         <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-lg supports-[backdrop-filter]:bg-background/60">

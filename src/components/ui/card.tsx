@@ -1,11 +1,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-/**
- * ShadCN-style Card component set.
- * Manually created to avoid CLI compatibility issues with Tailwind v4 / Next.js 16.
- */
-
 const Card = React.forwardRef<
     HTMLDivElement,
     React.HTMLAttributes<HTMLDivElement>

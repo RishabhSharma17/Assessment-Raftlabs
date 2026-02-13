@@ -10,14 +10,6 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-/**
- * TechnologyCard Component
- * -------------------------
- * Renders a technology as a clickable card with internal link.
- * Used on the home page grid. Each card links to /technology/[slug],
- * establishing the internal link graph that search engine crawlers follow.
- */
-
 interface TechnologyCardProps {
     technology: Technology;
 }

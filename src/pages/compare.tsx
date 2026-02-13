@@ -18,21 +18,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 
-/**
- * Compare Page (SSR)
- * --------------------
- * Server-side rendered on every request via getServerSideProps.
- *
- * Why SSR (not SSG)?
- *   The number of possible tech1/tech2 query parameter combinations is
- *   N × (N-1). For 8 technologies that's 56 pairs. As the dataset grows,
- *   statically generating every combination becomes impractical.
- *   SSR renders the comparison on demand, keeping build times constant
- *   while still delivering fully rendered HTML for SEO crawlers.
- *
- * URL format: /compare?tech1=nodejs&tech2=django
- */
-
 interface ComparePageProps {
     tech1: Technology | null;
     tech2: Technology | null;
@@ -57,7 +42,6 @@ export const getServerSideProps: GetServerSideProps<ComparePageProps> = async ({
     };
 };
 
-/** Helper: renders a comparison row with label and two values */
 function CompareRow({
     label,
     value1,
@@ -76,11 +60,6 @@ function CompareRow({
     );
 }
 
-/**
- * TechnologySelector — interactive dropdown pair.
- * Lets users pick any two technologies and navigate to the comparison.
- * Uses client-side state + router.push to trigger a new SSR request.
- */
 function TechnologySelector({
     allTechnologies,
     initialTech1,
@@ -169,7 +148,6 @@ export default function ComparePage({
     tech2,
     allTechnologies,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-    // Both technologies must be valid
     const isValid = tech1 && tech2;
 
     const title = isValid
@@ -193,7 +171,6 @@ export default function ComparePage({
             />
 
             <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
-                {/* Breadcrumb */}
                 <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
                     <Link href="/" className="hover:text-foreground transition-colors">
                         Home
@@ -222,7 +199,6 @@ export default function ComparePage({
                         : "Select two technologies below to see a side-by-side comparison."}
                 </p>
 
-                {/* Interactive technology selector — always visible */}
                 <TechnologySelector
                     allTechnologies={allTechnologies}
                     initialTech1={tech1?.slug}
@@ -231,7 +207,6 @@ export default function ComparePage({
 
                 {isValid ? (
                     <>
-                        {/* Comparison Header Cards */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
                             {[tech1, tech2].map((tech) => (
                                 <Link key={tech.slug} href={`/technology/${tech.slug}`}>
@@ -254,14 +229,11 @@ export default function ComparePage({
                                 </Link>
                             ))}
                         </div>
-
-                        {/* Detailed Comparison Table */}
                         <Card>
                             <CardHeader>
                                 <CardTitle className="text-lg">Detailed Comparison</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                {/* Table header */}
                                 <div className="grid grid-cols-3 gap-4 pb-3 border-b-2 border-border">
                                     <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                                         Attribute
@@ -340,8 +312,6 @@ export default function ComparePage({
                                 />
                             </CardContent>
                         </Card>
-
-                        {/* Links back to individual pages — internal linking */}
                         <Separator className="my-8" />
                         <div className="flex flex-col sm:flex-row gap-3 justify-center">
                             <Link href={`/technology/${tech1.slug}`}>
@@ -357,7 +327,6 @@ export default function ComparePage({
                         </div>
                     </>
                 ) : (
-                    /* Popular comparisons when no valid selection yet */
                     <section>
                         <Separator className="my-6" />
                         <p className="text-sm text-muted-foreground mb-4">
@@ -387,7 +356,6 @@ export default function ComparePage({
                     </section>
                 )}
 
-                {/* Other comparison suggestions */}
                 {isValid && (
                     <>
                         <Separator className="my-8" />

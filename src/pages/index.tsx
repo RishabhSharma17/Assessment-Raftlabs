@@ -7,23 +7,6 @@ import type { Technology } from "@/data/technologies";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
-/**
- * Home Page (SSG)
- * ----------------
- * Statically generated at build time via getStaticProps.
- *
- * Why SSG?
- *   The technology list is static and changes infrequently.
- *   Pre-rendering gives the fastest possible TTFB and ensures
- *   search engine crawlers see fully rendered HTML on first request.
- *
- * SEO strategy:
- *   - Optimized <title> and <meta description>
- *   - Internal links to every technology page (card grid)
- *   - CTA linking to the /compare page
- *   - Single <h1> with proper heading hierarchy
- */
-
 interface HomeProps {
   technologies: Technology[];
 }
@@ -50,7 +33,6 @@ export default function HomePage({
       />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
-        {/* Hero Section */}
         <section className="text-center mb-12">
           <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4">
             Tech Stack{" "}
@@ -70,7 +52,6 @@ export default function HomePage({
 
         <Separator className="mb-10" />
 
-        {/* Technology Grid */}
         <section>
           <h2 className="text-2xl font-bold mb-6">
             All Technologies
@@ -86,7 +67,6 @@ export default function HomePage({
           </div>
         </section>
 
-        {/* Internal Links Section — boosts crawlability */}
         <Separator className="my-10" />
 
         <section>
